@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ad.title}}
+	-
+	{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<style>
+		.object-fit-sm-contain {
+			object-fit: contain;
+		}
+
+		/* Ajout text shadow*/
+		.text {
+			color: #fff;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+		}
+		.col-md-3 {
+			object-fit: contain;
+		}
+
+		.carousel-images {
+			height: 20rem;
+			object-fit: cover;
+		}
+
+        .carousel-caption {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+        }
+	</style>
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<div class="row mt-2 d-flex">
+			<h1 class="my-2 text-center">{{ad.title}}</h1>
+			 <h6 class="card-subtitle mb-2 text-muted text-capitalize">{{ad.city}} {{ad.country}}</h6>
+
+			<div class="col-md-9">
+				<div class="card border-0 text-white">
+					<img src="/assets/images/uploads/ad/{{ad.coverImage}}" class="card-img" alt="{{ad.title}}" style="object-fit:2/3;height:20rem">
+					<div class="card-img-overlay">
+						<h3 class="card-title text">{{ad.title}}</h3>
+						<h4 class="card-subtitle text-capitalize text">{{ad.type}}
+							de
+							{{ad.rooms}}
+							chambres à
+							{{ad.price}}€/Nuit</h4>
+						<p class="card-text">{{ad.introduction|slice(0,150)}}...</p>
+						<a href="" class="btn btn-primary rounded text-white">Réserver</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+					<div class="carousel-indicators">
+						{% for image in ad.images %}
+							<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{loop.index0}}" {% if loop.first %} class="active" {% endif %} aria-current="true" aria-label="Slide 1"></button>
+						{% endfor %}
+
+
+					</div>
+					<div class="carousel-inner">
+						{% for image in ad.images %}
+							<div class="carousel-item w-100 {% if loop.first %}active {% endif %} ">
+								<img src="/assets/images/uploads/ad/{{image.url}}" class="d-block w-100 carousel-images" alt="{{ad.title}}">
+								<div class="carousel-caption d-none d-md-block">
+									{# <p>{{image.caption}}</p> #}
+								</div>
+							</div>
+						{% endfor %}
+
+
+					</div>
+					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</button>
+				</div>
+			</div>
+			<div class="col-md-9 mt-2">
+			<div class="card border-bottom-0">
+					<div class="card-body">
+						<h2 class="card-title">Introduction</h2>
+						<p class="card-text">{{ad.introduction|raw}}</p>
+					</div>
+				</div>
+				<div class="card mb-3 border-top-0">
+					<div class="card-body">
+						<h2 class="card-title">Description</h2>
+						<p class="card-text">{{ad.content|raw}}</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 mt-2">
+				<div class="card mb-3">
+					<div class="card-body d-flex justify-content-between">
+						<div class="col-md-6">
+							<img src="/assets/images/uploads/users/{{ad.author.profilPicture}}" alt="{{ad.author.firstName}}{{ad.author.lastName}}" class="img-fluid rounded object-fit-sm-contain" style="height:50px;">
+						</div>
+						<div class="col-md-6">
+							<h6 class="fw-bold text">{{ad.author.firstName}} {{ad.author.lastName}}</h6>
+							<span class="badge bg-primary">{{ad.author.ads|length}} annonces</span>
+						</div>
+
+					</div>
+					<div class="col p-1">
+						<p>{{ad.author.introduction|raw}}</p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>{% endblock %}

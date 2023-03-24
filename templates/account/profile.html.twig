@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profile -
+	{{parent()}}
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+
+		<div class="row">
+			<div class="col-md-9 m-auto">
+				<h1 class="text-center my-5">Edition profile de <span class="text-muted"><span class="text-capitalize">{{app.user.firstName}}</span>  {{app.user.lastName}}</span> </h1>
+
+				{{ form_start(form) }}
+				{{ form_widget(form.firstName, {'attr': {'class': 'mb-2'}})  }}
+				{{ form_widget(form.lastName, {'attr': {'class': 'mb-2'}}) }}
+				{{ form_widget(form.email, {'attr': {'class': 'mb-2'}}) }}
+				{{ form_widget(form.phone, {'attr': {'class': 'mb-2'}}) }}
+				{{ form_widget(form.address, {'attr': {'class': 'mb-2'}}) }}
+				{{ form_widget(form.city, {'attr': {'class': 'mb-2'}}) }}
+				{{ form_widget(form.postalCode, {'attr': {'class': 'mb-2'}}) }}
+				{{ form_widget(form.country, {'attr': {'class': 'mb-2'}}) }}
+				{{ form_widget(form.introduction, {'attr': {'class': 'mb-2'}}) }}
+				{{ form_widget(form.presentation, {'attr': {'class': 'mb-2'}}) }}
+				{{ form_widget(form.profilPicture, {'attr': {'class': 'mb-2'}}) }}
+
+                <img src="/assets/images/uploads/users/{{app.user.profilPicture}}" alt="" style="width:100px;">
+
+				<div class="d-grid gap-2 col-6 mx-auto">
+					<button type="submit" class="btn btn-success rounded">Valider</button>
+				</div>
+				{{ form_end(form) }}
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}

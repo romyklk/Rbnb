@@ -1,0 +1,86 @@
+
+{% block stylesheets %}
+<style>
+  .card-img-top {
+    object-fit: contain;
+  }
+
+  .bi-trash3-fill{
+    font-size: 15px;
+  }
+
+  .marge-btn{
+    margin-left: 30%;
+  }
+
+</style>
+{% endblock %}
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+
+{# On ajoute ce champ uniquement si on est en édition #}
+
+{% if app.request.attributes.get('_route') == 'app_ad_edit' %}
+
+
+
+<div class="d-flex flex-wrap justify-content-between">
+{% for image in ad.images %}
+  <div class="card m-1 border-0" style="width: 10rem;">
+    <img class="card-img-top" src="/assets/images/uploads/ad/{{ image.url }}" class="img-thumbnail" style="height:100px;" alt="{{image.caption}}">
+    <div class="card-body">
+        <a href="{{ path('app_ad_delete_image', {'id': image.id}) }}" data-delete="" class="btn btn-outline-danger btn-sm rounded marge-btn" data-token="{{csrf_token('delete'~ image.id)}}"><i class="bi bi-trash3-fill"></i></a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endif %}
+
+
+    <button class="btn btn-primary my-3">{{ button_label|default('Ajouter l\'annonce') }}</button>
+{{ form_end(form) }}
+
+
+{% block javascripts %}
+    <script>
+    window.onload = function () { 
+    const deleteImage = document.querySelectorAll("[data-delete]");
+    
+    //console.log(deleteImage);
+    for (let i = 0; i < deleteImage.length; i++) { 
+        deleteImage[i].addEventListener('click', function (e) { 
+            e.preventDefault(); 
+            if (confirm('Voulez-vous supprimer cette image ?')) { 
+                // On envoie la requête ajax avec fetch 
+
+                fetch(this.getAttribute('href'), { 
+                    method: 'DELETE', 
+                    headers: { 
+                        'X-Requested-With': 'XMLHttpRequest', 
+                        'Content-Type': 'application/json' 
+                    }, 
+                    body: JSON.stringify({ '_token': this.dataset.token }) 
+                }).then( 
+                    response => response.json() 
+                ).then( 
+                    data => { 
+                        if (data.success) { 
+                            this.parentElement.remove(); 
+                        } else { 
+                            alert(data.error); 
+                        } 
+                    } 
+                ).catch(e => alert(e));
+
+  
+                window.location.reload();
+            } 
+        });
+
+
+    }
+}
+    </script>
+{% endblock %}

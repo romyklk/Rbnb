@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification {{ad.title}}- {{parent()}}{% endblock %}
+
+{% block body %}
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-md-10 shadow p-5 m-auto">
+                <h1 class="text-center">Modifier l'annonce <span class="text-muted text-capitalize"> {{ad.title}}<span></h1>
+            {{ include('ad/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+
+                <a href="{{ path('app_ads') }}">back to list</a>
+
+    {{ include('ad/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}
+

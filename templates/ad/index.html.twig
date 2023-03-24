@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos annonces -
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-center my-3">liste des annonces</h1>
+
+	<div class="container">
+		<div class="row mt-2">
+			{% for ad in ads %}
+			{% set adUrl = path('app_ad_show',{slug:ad.slug}) %}
+				<div class="col-md-4 my-2">
+					<div class="card" style="width: 25rem;">
+					<a href="{{adUrl}}" class="text-decoration-none">
+						<img src="/assets/images/uploads/ad/{{ad.coverImage}}" class="card-img-top" alt="{{ad.title}}">
+					</a>
+					<a href="{{adUrl}}" class="text-decoration-none">
+						<div class="card-header text-center">
+						{{ad.type}} {{ad.rooms}} chambres<br>
+                            
+                            <div class="row">
+                            <strong class="text-dark" style="font-weight:bold">{{ad.price}}/Nuit €</strong>
+                                <small class="text-end">5 <i class="bi bi-star-fill"></i></small>
+                            </div>
+						</div>
+					</a>
+						<div class="card-body">
+						<a href="{{adUrl}}" class="text-decoration-none">
+							<h5 class="card-title">{{ad.title}}</h5>
+						</a>
+							<p class="card-text">{{ad.introduction}}</p>
+							<a href="{{adUrl}}" class="btn btn-primary rounded-pill">Voir</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+{% endblock %}

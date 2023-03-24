@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Création d'une annone
+				    -
+	{{ parent() }}
+{% endblock %}
+
+{% form_theme form _self %}
+
+{% block body %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 shadow">
+				<h1 class="text-center my-3">Création d'une annonce</h1>
+				<div class="col-md-10 m-auto mt-2 p-3">
+					{{ form_start(form) }}
+					{{ form_widget(form) }}
+
+					<div class="d-grid gap-2 col-6 mx-auto">
+						<button class="btn btn-primary">Créer L'annonce</button>
+
+						<a href="{{ path('app_ads') }}" class="btn btn-info">Annuler</a>
+					</div>
+					{{ form_end(form) }}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+

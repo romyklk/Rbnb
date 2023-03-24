@@ -1,0 +1,14 @@
+<div class="container showandhidealert">
+			<div class="row">
+				<div class="col-md-8 m-auto">
+					{% for label, messages in app.flashes() %}
+						{% for message in messages %}
+							<div class="alert alert-{{ label }} alert-dismissible fade show text-center" role="alert">
+							<i class="bi bi-exclamation-triangle-fill"></i>	{{ message|raw }}
+								<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+							</div>
+						{% endfor %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
