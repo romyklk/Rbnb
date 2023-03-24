@@ -38,7 +38,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     #[Assert\Length(min: 8, minMessage: "Le mot de passe doit faire au moins 8 caractères")]
-    #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide")]
     #[Assert\Regex(pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/', message: "Le mot de passe doit contenir au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial")]
     private ?string $password = null;
 
@@ -96,31 +95,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Length(min: 10, max: 10, exactMessage: "Le numéro de téléphone doit faire 10 caractères")]
-    #[Assert\Regex(pattern: '/^[0-9]{10}$/', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotBlank(message: "Le numéro de téléphone ne peut pas être vide")]
-    #[Assert\NotEqualTo(value: '0000000000', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '1111111111', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '2222222222', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '3333333333', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '4444444444', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '5555555555', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '6666666666', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '7777777777', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '8888888888', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '9999999999', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '1234567890', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '0987654321', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '0123456789', message: "Le numéro de téléphone n'est pas valide")]
-    #[Assert\NotEqualTo(value: '9876543210', message: "Le numéro de téléphone n'est pas valide")]
+    #[Assert\Length(min: 10, max: 15, exactMessage: "Le numéro de téléphone doit faire 15 caractères")]
+    // Regex numéro de téléphone français +33
+    #[Assert\Regex(pattern: '/^((\+)33|0)[1-9](\d{2}){4}$/', message: "Le numéro de téléphone n'est pas valide" )]
+    // Regex numéro de téléphone belge +32
+    #[Assert\Regex(pattern: '/^((\+)32|0)[1-9](\d{2}){4}$/', message: "Le numéro de téléphone n'est pas valide" )]
     private ?string $phone = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Ad::class)]
     private Collection $ads;
 
+    #[ORM\OneToMany(mappedBy: 'booker', targetEntity: Booking::class)]
+    private Collection $bookings;
+
     public function __construct()
     {
         $this->ads = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
 
@@ -388,6 +379,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($ad->getAuthor() === $this) {
                 $ad->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings->add($booking);
+            $booking->setBooker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->removeElement($booking)) {
+            // set the owning side to null (unless already changed)
+            if ($booking->getBooker() === $this) {
+                $booking->setBooker(null);
             }
         }
 

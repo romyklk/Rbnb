@@ -8,6 +8,7 @@ use Faker\Factory;
 use App\Entity\User;
 use Faker\Generator;
 use App\Entity\Image;
+use App\Entity\Booking;
 use League\ISO3166\ISO3166;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -90,6 +91,32 @@ class AdFixtures extends Fixture
                     ->setCaption($faker->sentence())
                     ->setAd($ad);
                 $manager->persist($image);
+            }
+
+            // Gestion des réservations
+
+            for ($j = 0; $j < mt_rand(0, 10); $j++) {
+                $booking = new Booking();
+                $createdAt = new \DateTime();
+                $startDate = $faker->dateTimeBetween('-1 months');
+                $duration = mt_rand(3, 10);
+                $amount = $ad->getPrice() * $duration;
+                $booker = $faker->randomElement($users);
+
+                $comment = $faker->paragraph();
+
+                $booking->setBooker($booker)
+                    ->setAd($ad)
+                    ->setStartDate($startDate)
+                    ->setCreatedAt($createdAt)
+                    ->setAmount($amount)
+                    ->setReservationDate($faker->dateTimeBetween('-9 months'))
+                    ->setComment($comment)
+                    ;
+
+                $manager->persist($booking);
+
+
             }
 
             $manager->persist($ad);

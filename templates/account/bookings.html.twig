@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vos réservations - {{parent()}}
+{% endblock %}
+
+{% block body %}
+<h1 class="text-center">vos réservations sur Sym R Bnb</h1>
+	<div class="container d-flex justify-content-between flex-wrap mt-5">
+		
+        
+		{% for booking in app.user.bookings %}
+        
+            <div class="card mt-3 mx-2" style="width:35rem">
+            
+                <div class="card-header bg-primary text-white text-center">
+                    Informations de réservation n°{{booking.id}}
+                </div>
+                <img src="{{booking.ad.coverImage}}" class="card-img-top" alt="{{booking.ad.title}}" style="height:200px;object-fit:cover">
+                <div class="card-body">
+                    <h5 class="card-title">{{booking.ad.title}}</h5>
+                    <p class="card-text">Date d'arrivée : {{booking.startDate|date("d/m/Y")}}</p>
+                    <p class="card-text">Date de départ : {{booking.createdAt|date("d/m/Y")}}</p>
+                    <p class="card-text">Nombre d'adultes : 2</p>
+                    <p class="card-text">Prix total : {{booking.amount}} €</p>
+                </div>
+                <a href="" class="btn btn-outline-info">Voir l'annonce</a>
+                <div class="card-footer text-muted">
+                    Merci pour votre réservation !
+                </div>
+		</div>
+        {% endfor %}
+        </div>
+	</div>
+
+
+{% endblock %}

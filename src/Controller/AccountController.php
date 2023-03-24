@@ -112,4 +112,17 @@ class AccountController extends AbstractController
         ]);
     }
 
+
+    // Pour afficher les reservations d'un utilisateur
+    #[Route('/account/bookings', name: 'app_account_bookings')]
+    public function bookings(UserRepository $userRepository): Response
+    {
+        $user = $this->getUser();
+       // $bookings = $userRepository->findBookings($user);
+
+        return $this->render('account/bookings.html.twig', [
+           // 'bookings' => $bookings,
+        ]);
+    }
+
 }

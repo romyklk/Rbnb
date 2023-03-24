@@ -34,9 +34,6 @@
 {% endblock %}
 
 {% block body %}
-<pre>
-	{{ dump(ad.slug) }}
-</pre>
 	<div class="container">
 		<div class="row mt-2 d-flex">
 			<h1 class="my-2 text-center">{{ad.title}}</h1>
@@ -53,7 +50,7 @@
 							chambres à
 							{{ad.price}}€/Nuit</h4>
 						<p class="card-text">{{ad.introduction|slice(0,150)}}...</p>
-						<a href="" class="btn btn-primary rounded text-white">Réserver</a>
+						<a href="{{path('app_booking_create',{'slug':ad.slug})}}" class="btn btn-primary rounded text-white">Réserver</a>
 						{% if app.user  and app.user == ad.author %}
 							<a href="{{path('app_ad_edit',{'id':ad.id})}}" class="btn btn-warning rounded text-white"><i class="bi bi-pen"></i></a>
 							<a href="{{path('app_ad_delete',{'slug':ad.slug})}}" class="btn btn-danger rounded text-white"><i class="bi bi-trash3"></i></a>

@@ -63,6 +63,36 @@ class Ad
 
     private ?string $imagesUrl = null;
 
+    // Permet d'avoir un tableau de jours qui ne sont pas disponibles pour cette annonce de datetime à datetime
+    public function getNotAvailableDays(){
+        $notAvailableDays = [];
+
+        // Parcourir les réservations de cette annonce
+        foreach($this->getBookings() as $booking){
+        // Calculer les jours qui se trouvent entre la date d'arrivée et de départ
+        // range() est une fonction PHP qui permet de générer un tableau de valeurs entre deux valeurs données
+            $resultat = range(
+                $booking->getStartDate()->getTimestamp(),
+                $booking->getCreatedAt()->getTimestamp(),
+                24 * 60 * 60 
+            );
+
+            // Transformer ces timestamps en objets DateTime et les ajouter au tableau des jours d'indisponibilité
+            // array_map() est une fonction PHP qui permet de transformer un tableau
+            $days = array_map(function($dayTimestamp){
+                return new \DateTime(date('Y-m-d', $dayTimestamp));
+            }, $resultat);
+
+            // array_merge() est une fonction PHP qui permet de fusionner deux tableaux
+            // array_merge() fusionne les tableaux $notAvailableDays et $days
+            // array_merge() prend en premier argument le tableau dans lequel on veut fusionner les autres tableaux
+            // array_merge() prend en second argument le premier tableau à fusionner
+            $notAvailableDays = array_merge($notAvailableDays, $days);
+        }
+
+        return $notAvailableDays;
+    }
+
     
 
     #[ORM\OneToMany(mappedBy: 'ad', targetEntity: Image::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
@@ -90,9 +120,13 @@ class Ad
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
+    #[ORM\OneToMany(mappedBy: 'ad', targetEntity: Booking::class)]
+    private Collection $bookings;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     #[ORM\PrePersist] // Pour que cette méthode soit appelée avant la persistance
@@ -343,6 +377,36 @@ class Ad
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings->add($booking);
+            $booking->setAd($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->removeElement($booking)) {
+            // set the owning side to null (unless already changed)
+            if ($booking->getAd() === $this) {
+                $booking->setAd(null);
+            }
+        }
 
         return $this;
     }

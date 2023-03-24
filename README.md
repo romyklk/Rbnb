@@ -108,3 +108,24 @@ Ajouter les assertions `use Symfony\Component\Validator\Constraints as Assert;`
 - Finalisation de l'interface en ajoutant les users de chaque annonce dans le fichier `ad/show.html.twig`
 
 
+## Creation et gestion des réservations
+
+- Création de l'entité Booking avec la commande suivante :
+`symfony console make:entity`
+ - Entity Booking
+    - startDate (datetimeImmutable) Nullable = false
+    - endDate (datetimeImmutable) Nullable = false
+    - createdAt (datetimeImmutable) Nullable = false
+    - amount (float) Nullable = false
+    - booker (User) Relation ManyToOne avec User (nullable = false)
+    - ad (Ad) Relation ManyToOne avec Ad (nullable = false)
+    - comment (string) Nullable = true // Pour ajouter un commentaire sur la réservation
+
+- Creation des fixtures pour les bookings
+
+- Création du crud
+`symfony console make:crud Booking`
+
+
+
+
