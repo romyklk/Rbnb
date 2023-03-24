@@ -8,8 +8,6 @@
 {% endblock %}
 
 {% block body %}
-
-
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-4">
@@ -48,18 +46,99 @@
 		<div class="row">
 			<p class="mt-3">{{user.presentation| raw}}.</p>
 		</div>
+
+{% if user is same as (app.user) %}
+<div class="container mt-4">
+		<div class="row">
+			<div class="col-lg-3 mb-4">
+				<div class="card shadow">
+					<div class="card-body">
+						<h4 class="card-title">Mon profil</h4>
+						<p class="card-text">Gérer les informations de profil.</p>
+						<a href="{{path('app_account_profile')}}" class="btn btn-info"><i class="bi bi-person"></i> Modifier mon profil</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 mb-4">
+				<div class="card shadow">
+					<div class="card-body">
+						<h4 class="card-title">Mot de passe</h4>
+						<p class="card-text">Modifier mon mot de passe.</p>
+						<a href="{{path('app_account_password')}}" class="btn btn-info"><i class="bi bi-calendar-check"></i> Changer mot de passe</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 mb-4">
+				<div class="card shadow">
+					<div class="card-body">
+						<h4 class="card-title">Mes réservations</h4>
+						<p class="card-text">Historique de vos réservations.</p>
+						<a href="#" class="btn btn-info"><i class="bi bi-calendar-check"></i> Voir mes réservations</a>
+					</div>
+				</div>
+			</div>
+            <div class="col-lg-3 mb-4">
+				<div class="card shadow">
+					<div class="card-body">
+						<h4 class="card-title">Mes avis</h4>
+						<p class="card-text">Historique de vos avis.</p>
+						<a href="#" class="btn btn-info"><i class="bi bi-calendar-check"></i> Voir mes réservations</a>
+					</div>
+				</div>
+			</div>
+        </div>
+</div>
+<div class="container mt-4">
+<div class="col-md-2">
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Ajouter une annonce
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <a href="{{path('app_ad_new')}}" class="btn btn-info">Ajouter</a>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        Gérer mes annonces
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+       <a href="" class="btn btn-info">Gestion</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+{% endif %}
+
+
 		<hr>
 		{% if user.ads|length > 0 %}
 
 			<h3>Mes propriétés Airbnb</h3>
 			<div class="row">
 				{% for ad in user.ads %}
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 mb-2">
 					<div class="card">
 						<img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Image de propriété">
 						<div class="card-body">
 							<h5 class="card-title">{{ad.title}}</p>
-							<a href="#" class="btn btn-primary">En savoir plus</a>
+							<a href="{{path('app_ad_show',{'slug':ad.slug})}}" class="btn btn-primary">En savoir plus</a>
+							{% if app.user  and app.user == ad.author %}
+							<a href="{{path('app_ad_edit',{'id':ad.id})}}" class="btn btn-warning rounded text-white"><i class="bi bi-pen"></i></a>
+							<a href="{{path('app_ad_delete',{'slug':ad.slug})}}" class="btn btn-danger rounded text-white"><i class="bi bi-trash3"></i></a>
+						{% endif %}
 						</div>
 					</div>
 				</div>

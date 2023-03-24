@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Form\AccountType;
 use App\Entity\PasswordUpdate;
 use App\Form\PasswordUpdateType;
+use App\Repository\UserRepository;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,11 +16,14 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AccountController extends AbstractController
 {
+    // Pour afficher le profil d'un utilisateur
     #[Route('/account', name: 'app_account')]
-    public function index(): Response
+    public function show(): Response
     {
-        return $this->render('account/index.html.twig', [
-            'controller_name' => 'AccountController',
+        $user = $this->getUser();
+        
+        return $this->render('user/index.html.twig', [
+            'user' => $user,
         ]);
     }
 
@@ -107,4 +111,5 @@ class AccountController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
 }

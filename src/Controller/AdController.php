@@ -8,6 +8,7 @@ use App\Entity\Image;
 use App\Repository\AdRepository;
 use App\Repository\ImageRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -122,6 +123,7 @@ class AdController extends AbstractController
         ]);
     }
 
+    #[Security('is_granted("ROLE_USER") and user === ad.getAuthor()', message: "Cette annonce ne vous appartient pas, vous ne pouvez pas la modifier")]
     #[Route('/{id}/edit', name: 'app_ad_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ad $ad, AdRepository $adRepository): Response
     {
@@ -183,12 +185,20 @@ class AdController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_ad_delete', methods: ['POST'])]
-    public function delete(Request $request, Ad $ad, AdRepository $adRepository): Response
+    #[Security('is_granted("ROLE_USER") and user === ad.getAuthor()', message: "Cette annonce ne vous appartient pas, vous ne pouvez pas la supprimer")]
+    #[Route('/{slug}/delete', name: 'app_ad_delete')]
+    public function delete(Request $request, Ad $ad, AdRepository $adRepository,EntityManagerInterface $entityManagerInterface): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $ad->getId(), $request->request->get('_token'))) {
+       /*  if ($this->isCsrfTokenValid('delete' . $ad->getId(), $request->request->get('_token'))) {
             $adRepository->remove($ad, true);
-        }
+
+            $this->addFlash('success', 'L\'annonce <strong>' . $ad->getTitle() . '</strong> a bien été supprimée !');
+        } */
+
+        $entityManagerInterface->remove($ad);
+        $entityManagerInterface->flush();
+
+
 
         return $this->redirectToRoute('app_ads', [], Response::HTTP_SEE_OTHER);
     }
