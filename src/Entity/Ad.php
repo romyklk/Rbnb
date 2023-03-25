@@ -64,36 +64,67 @@ class Ad
     private ?string $imagesUrl = null;
 
     // Permet d'avoir un tableau de jours qui ne sont pas disponibles pour cette annonce de datetime à datetime
-    public function getNotAvailableDays(){
-        $notAvailableDays = [];
+//     public function getNotAvailableDays()
+//     {
+//         $notAvailableDays = [];
 
-        // Parcourir les réservations de cette annonce
-        foreach($this->getBookings() as $booking){
-        // Calculer les jours qui se trouvent entre la date d'arrivée et de départ
-        // range() est une fonction PHP qui permet de générer un tableau de valeurs entre deux valeurs données
-            $resultat = range(
-                $booking->getStartDate()->getTimestamp(),
-                $booking->getCreatedAt()->getTimestamp(),
-                24 * 60 * 60 
-            );
+//         // Parcourir les réservations de cette annonce
+//         foreach ($this->getBookings() as $booking) {
+//             // Calculer les jours qui se trouvent entre la date d'arrivée et de départ
+//             // range() est une fonction PHP qui permet de générer un tableau de valeurs entre deux valeurs données
+//           $resultat = range(
+//                 $booking->getStartDate()->getTimestamp(),
+//                 $booking->getCreatedAt()->getTimestamp(),
+//                 24 * 60 * 60 
+//             );
+            
+//         //!\\ Ce code est à revoir car il ne prend pas en compte les réservations qui ont été créées avant la date de départ de la réservation en cours de traitement dans la boucle foreach ! Pour résoudre ce problème, on va ajouter une condition if qui va vérifier si la date de départ est supérieure à la date de création de la réservation en cours de traitement dans la boucle foreach. Si c'est le cas, on ajoute les jours entre la date de départ et la date de création de la réservation au tableau des jours d'indisponibilité de l'annonce sinon on continue la boucle sans rien ajouter au tableau des jours d'indisponibilité de l'annonce et on passe à la réservation suivante
 
-            // Transformer ces timestamps en objets DateTime et les ajouter au tableau des jours d'indisponibilité
-            // array_map() est une fonction PHP qui permet de transformer un tableau
-            $days = array_map(function($dayTimestamp){
-                return new \DateTime(date('Y-m-d', $dayTimestamp));
-            }, $resultat);
+// // Si la date de départ est supérieure à la date de création de la réservation alors on ajoute les jours entre la date de départ et la date de création de la réservation au tableau des jours d'indisponibilité de l'annonce sinon on continue la boucle sans rien ajouter au tableau des jours d'indisponibilité de l'annonce et on passe à la réservation suivante
+// /*             if ((abs($booking->getStartDate()->getTimestamp() - $booking->getCreatedAt()->getTimestamp() >= 24 * 60 * 60))) {
+//                 $resultat = range(
+//                     $booking->getStartDate()->getTimestamp(),
+//                     $booking->getCreatedAt()->getTimestamp(),
+//                     24 * 60 * 60
+//                 );
+//             } else {
+//                 continue;
+//             }
+//  */
+//             // Transformer ces timestamps en objets DateTime et les ajouter au tableau des jours d'indisponibilité
+//             // array_map() est une fonction PHP qui permet de transformer un tableau
+//             $days = array_map(function ($dayTimestamp) {
+//                 return new \DateTime(date('Y-m-d', $dayTimestamp));
+//             }, $resultat);
 
-            // array_merge() est une fonction PHP qui permet de fusionner deux tableaux
-            // array_merge() fusionne les tableaux $notAvailableDays et $days
-            // array_merge() prend en premier argument le tableau dans lequel on veut fusionner les autres tableaux
-            // array_merge() prend en second argument le premier tableau à fusionner
-            $notAvailableDays = array_merge($notAvailableDays, $days);
+//             // array_merge() est une fonction PHP qui permet de fusionner deux tableaux
+//             // array_merge() fusionne les tableaux $notAvailableDays et $days
+//             // array_merge() prend en premier argument le tableau dans lequel on veut fusionner les autres tableaux
+//             // array_merge() prend en second argument le premier tableau à fusionner
+//             $notAvailableDays = array_merge($notAvailableDays, $days);
+//         }
+
+//         return $notAvailableDays;
+//     }
+
+public function getNotAvailableDays()
+{
+    $notAvailableDays = [];
+
+    foreach ($this->getBookings() as $booking) {
+        $startDate = $booking->getStartDate();
+        $endDate = $booking->getCreatedAt();
+        $interval = new \DateInterval('P1D'); // un intervalle de 1 jour
+        $period = new \DatePeriod($startDate, $interval, $endDate);
+
+        foreach ($period as $date) {
+            $notAvailableDays[] = $date;
         }
-
-        return $notAvailableDays;
     }
 
-    
+    return $notAvailableDays;
+}
+
 
     #[ORM\OneToMany(mappedBy: 'ad', targetEntity: Image::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $images;
@@ -298,12 +329,12 @@ class Ad
         return $this;
     }
 
-    
+
 
 
     /**
      * Get the value of imagesUrl
-     */ 
+     */
     public function getImagesUrl()
     {
         return $this->imagesUrl;
@@ -313,7 +344,7 @@ class Ad
      * Set the value of imagesUrl
      *
      * @return  self
-     */ 
+     */
     public function setImagesUrl($imagesUrl)
     {
         $this->imagesUrl = $imagesUrl;

@@ -29,6 +29,7 @@
             </h6> 
             </div>
         <hr>
+        {% set daydate = "now"|date("d/m/Y") %}
             {{form_start(form)}}
             
                 
@@ -81,15 +82,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 
     <script>
+    // Ici on va créer une fonction qui va permettre de désactiver les dates qui ne sont pas disponibles
         $(document).ready(function() {
             $('#booking_createdAt,#booking_startDate').datepicker({
-                format: 'dd/mm/yyyy',
-                startDate: new Date(),
+                format: 'dd/mm/yyyy', // On va formater la date en français
+                startDate: new Date(), // On ne peut pas choisir une date antérieure à aujourd'hui
+                // On va désactiver les dates qui ne sont pas disponibles pour cette annonce (notAvailableDays) qui sont envoyées par le contrôleur
                 dateDisable: [
                     {% for day in ad.notAvailableDays %}
                         "{{day.format('d/m/Y')}}",
                     {% endfor %}
                 ],
+
             });
         });
 
@@ -107,11 +111,15 @@
                 const interval = (endDate.getTime() - startDate.getTime()) 
 
                 const days = interval / DAYS_TIME;
+                // On arrondi à l'entier supérieur
+               // days = Math.ceil(days);
 
                 const amount = days * {{ad.price}};
+                // arrondi à 2 chiffres après la virgule
+                //amount = amount.toFixed(2);
 
-                $('#days').text(days);
-                $('#amount').text(amount);
+                $('#days').text(Math.ceil(days));
+                $('#amount').text(amount.toFixed(2));
             }
         }
     </script>
