@@ -144,7 +144,6 @@ Ajouter les assertions `use Symfony\Component\Validator\Constraints as Assert;`
 
 ## Pagination
 
-- Installation de KnpPaginatorBundle
-`composer require knplabs/knp-paginator-bundle`
+- gestion de la pagination en utilisant un service. Créer un dossier `src/Service` et un fichier `Pagination.php`
 
 
