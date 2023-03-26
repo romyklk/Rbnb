@@ -105,4 +105,11 @@ class Comment
 
         return $this;
     }
+
+    // to string
+
+    public function __toString(): string
+    {
+        return $this->content;
+    }
 }

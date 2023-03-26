@@ -135,6 +135,12 @@ Ajouter les assertions `use Symfony\Component\Validator\Constraints as Assert;`
     - author (User) Relation ManyToOne avec User (nullable = false)
     - ad (Ad) Relation ManyToOne avec Ad (nullable = false)
 
+## CREATION ADMIN DASHBOARD
+
+- Installation de EasyAdminBundle
+`composer require easycorp/easyadmin-bundle`
+`symfony console make:admin:dashboard`
+`symfony console make:admin:crud`
 
 
 

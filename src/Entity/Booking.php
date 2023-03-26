@@ -204,4 +204,12 @@ class Booking
 
         return $this;
     }
+
+
+    // to string
+
+    public function __toString(): string
+    {
+        return $this->getBooker()->getFirstName() . ' ' . $this->getBooker()->getLastName();
+    }
 }

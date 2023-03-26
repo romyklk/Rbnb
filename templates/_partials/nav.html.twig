@@ -24,6 +24,12 @@
 			{% if app.user %}
 			
 			<div class="d-flex">
+
+			{% if is_granted('ROLE_ADMIN') %}
+			<a href="{{path('admin')}}" class="btn btn-outline-secondary btn-sm me-lg-3 me-3 text-white">Dashboard</a>
+			
+			{% endif %}
+			
 				<a href="{{path('app_account')}}" class="btn btn-outline-secondary btn-sm me-lg-3 me-3 text-white">Mon compte</a>
 				<a href="{{path('app_logout')}}" class="btn btn-outline-secondary btn-sm me-lg-3 me-3 text-white">Logout</a>
 			</div>

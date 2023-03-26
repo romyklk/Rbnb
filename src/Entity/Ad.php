@@ -190,7 +190,8 @@ public function getNotAvailableDays()
 
         // Faire la division pour avoir la moyenne
         if (count($this->comments) > 0) {
-            return $sum / count($this->comments);
+            // arrondir la moyenne à 1 chiffre après la virgule
+            return round($sum / count($this->comments), 2);
         }
 
         return 0;
@@ -505,4 +506,6 @@ public function getNotAvailableDays()
 
         return $this;
     }
+
+
 }

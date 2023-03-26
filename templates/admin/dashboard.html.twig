@@ -1,0 +1,22 @@
+{% extends "@EasyAdmin/page/content.html.twig" %}
+
+{% block content %}
+
+
+	<div class="container">
+		<div class="row">
+			<div class="text-center">
+				<h1>Bienvenue,
+					{{ app.user.firstName }}
+					{{ app.user.lastName }}</h1>
+				<p>Vous êtes connecté en tant qu'administrateur</p>
+				<a href="{{ logout_url('main') }}" class="btn btn-primary">Déconnexion</a>
+				{# Retour à la page profil #}
+				<a href="{{ path('app_user_show',{'slug':app.user.slug}) }}" class="btn btn-info">Retour à votre profil</a>
+				{# Retour à la page d'accueil #}
+				<a href="{{ path('app_home') }}" class="btn btn-outline-primary">Retour à l'accueil</a>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
