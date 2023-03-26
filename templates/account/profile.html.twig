@@ -25,7 +25,7 @@
 				{{ form_widget(form.presentation, {'attr': {'class': 'mb-2'}}) }}
 				{{ form_widget(form.profilPicture, {'attr': {'class': 'mb-2'}}) }}
 
-                <img src="/assets/images/uploads/users/{{app.user.profilPicture}}" alt="" style="width:100px;">
+                <img src="{{app.user.profilPicture}}" alt="" style="width:100px;">
 
 				<div class="d-grid gap-2 col-6 mx-auto">
 					<button type="submit" class="btn btn-success rounded">Valider</button>

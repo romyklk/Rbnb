@@ -154,10 +154,14 @@ public function getNotAvailableDays()
     #[ORM\OneToMany(mappedBy: 'ad', targetEntity: Booking::class)]
     private Collection $bookings;
 
+    #[ORM\OneToMany(mappedBy: 'ad', targetEntity: Comment::class, orphanRemoval: true)]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     #[ORM\PrePersist] // Pour que cette méthode soit appelée avant la persistance
@@ -172,6 +176,36 @@ public function getNotAvailableDays()
         if (empty($this->createdAt)) {
             $this->createdAt = new \DateTimeImmutable();
         }
+    }
+
+    // cette méthode permet de calculer la moyenne des notes de l'annonce
+    public function getAvgRatings(): float
+    {
+        // Calculer la somme des notations
+        // $this->comments->toArray() permet de transformer la collection en tableau
+        // array_reduce() est une fonction PHP qui permet de transformer un tableau en une valeur unique
+        $sum = array_reduce($this->comments->toArray(), function ($total, $comment) {
+            return $total + $comment->getRating();
+        }, 0); // 0 est la valeur de départ de $total Si l'anonce n'a pas de commentaire, $total vaudra 0
+
+        // Faire la division pour avoir la moyenne
+        if (count($this->comments) > 0) {
+            return $sum / count($this->comments);
+        }
+
+        return 0;
+    }
+
+    // Permet de récupérer le commentaire d'un auteur par rapport à une annonce (si il en a déjà laissé un)
+    public function getCommentFromAuthor(User $author): ?Comment
+    {
+        foreach ($this->comments as $comment) {
+            if ($comment->getAuthor() === $author) {
+                return $comment;
+            }
+        }
+
+        return null;
     }
 
     public function getId(): ?int
@@ -436,6 +470,36 @@ public function getNotAvailableDays()
             // set the owning side to null (unless already changed)
             if ($booking->getAd() === $this) {
                 $booking->setAd(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setAd($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getAd() === $this) {
+                $comment->setAd(null);
             }
         }
 

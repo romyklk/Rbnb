@@ -11,12 +11,18 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-4">
+			{% if user is same as (app.user) %}
 				<h2>Profil Sym R BnB
+				{% endif %}
 				</h2>
-				<img src="/assets/images/uploads/users/{{user.profilPicture}}" class="img-thumbnail rounded-circle" alt="Avatar">
+				<img src="{{user.profilPicture}}" class="img-thumbnail rounded-circle" alt="Avatar">
 			</div>
 			<div class="col-sm-8">
-				<h3>Informations de l'annonceur</h3>
+			{% if user is same as (app.user) %}
+				<h3>Mon profil</h3>
+			{% else %}
+			<h3>Informations du membre</h3>
+			{% endif %}
 				<table class="table table-bordered">
 					<tbody>
 						<tr>

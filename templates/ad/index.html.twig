@@ -14,15 +14,25 @@
 				<div class="col-md-4 my-2">
 					<div class="card" style="width: 25rem;">
 					<a href="{{adUrl}}" class="text-decoration-none">
-						<img src="/assets/images/uploads/ad/{{ad.coverImage}}" class="card-img-top" alt="{{ad.title}}">
+						<img src="{{ad.coverImage}}" class="card-img-top" alt="{{ad.title}}">
 					</a>
 					<a href="{{adUrl}}" class="text-decoration-none">
 						<div class="card-header text-center">
 						{{ad.type}} {{ad.rooms}} chambres<br>
                             
                             <div class="row">
-                            <strong class="text-dark" style="font-weight:bold">{{ad.price}}/Nuit €</strong>
-                                <small class="text-end">5 <i class="bi bi-star-fill"></i></small>
+                            <strong class="text-dark" style="font-weight:bold">{{ad.price | number_format(2)}}/Nuit €</strong>
+							{% if ad.comments|length >0 %}
+							
+                                <small class="text-end">
+									{% include "_partials/_rating.html.twig" with {'rating': ad.getAvgRatings()} %}
+
+								</small>
+								{% else %}
+								<small class="text-end">Pas de note</small>
+
+								{% endif %}
+
                             </div>
 						</div>
 					</a>

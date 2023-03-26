@@ -86,6 +86,7 @@
         $(document).ready(function() {
             $('#booking_createdAt,#booking_startDate').datepicker({
                 format: 'dd/mm/yyyy', // On va formater la date en français
+                // Afficher les mois en français
                 startDate: new Date(), // On ne peut pas choisir une date antérieure à aujourd'hui
                 // On va désactiver les dates qui ne sont pas disponibles pour cette annonce (notAvailableDays) qui sont envoyées par le contrôleur
                 dateDisable: [
@@ -122,6 +123,7 @@
                 $('#amount').text(amount.toFixed(2));
             }
         }
+
     </script>
 {% endblock %}
 

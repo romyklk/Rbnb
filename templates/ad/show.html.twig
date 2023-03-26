@@ -30,25 +30,47 @@
         .carousel-caption {
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
         }
+
+
+
 	</style>
 {% endblock %}
 
 {% block body %}
+
+
+{% set nbComment = ad.comments|length %}
+
+{% set moyenne = 0 %}
+{% for comment in ad.comments %}
+	{% set moyenne = moyenne + comment.rating %}
+{% endfor %}
+
+
+
+
+
 	<div class="container">
 		<div class="row mt-2 d-flex">
 			<h1 class="my-2 text-center">{{ad.title}}</h1>
 			 <h6 class="card-subtitle mb-2 text-muted text-capitalize">{{ad.city}} {{ad.country}}</h6>
-
 			<div class="col-md-9">
+					<h6 class="text-capitalize text-end">
+				{% if nbComment >0 %}
+				{% set moyenne = moyenne / nbComment %}
+				 Note  {{moyenne|round(1)}} <i class="bi bi-star-fill" style="color:gold"></i> / {{nbComment}} avis
+				{% endif %}
+			</h6>
 				<div class="card border-0 text-white">
-					<img src="/assets/images/uploads/ad/{{ad.coverImage}}" class="card-img" alt="{{ad.title}}" style="object-fit:2/3;height:20rem">
+				
+					<img src="{{ad.coverImage}}" class="card-img" alt="{{ad.title}}" style="object-fit:2/3;height:20rem">
 					<div class="card-img-overlay">
 						<h3 class="card-title text">{{ad.title}}</h3>
 						<h4 class="card-subtitle text-capitalize text">{{ad.type}}
 							de
 							{{ad.rooms}}
 							chambres à
-							{{ad.price}}€/Nuit</h4>
+							{{ad.price| number_format(2)}}€/Nuit</h4>
 						<p class="card-text">{{ad.introduction|slice(0,150)}}...</p>
 						<a href="{{path('app_booking_create',{'slug':ad.slug})}}" class="btn btn-primary rounded text-white">Réserver</a>
 						{% if app.user  and app.user == ad.author %}
@@ -72,7 +94,7 @@
 					<div class="carousel-inner">
 						{% for image in ad.images %}
 							<div class="carousel-item w-100 {% if loop.first %}active {% endif %} ">
-								<img src="/assets/images/uploads/ad/{{image.url}}" class="d-block w-100 carousel-images" alt="{{ad.title}}">
+								<img src="{{image.url}}" class="d-block w-100 carousel-images" alt="{{ad.title}}">
 								<div class="carousel-caption d-none d-md-block">
 									{# <p>{{image.caption}}</p> #}
 								</div>
@@ -105,12 +127,14 @@
 					</div>
 				</div>
 			</div>
+
+
 			<div class="col-md-3 mt-2">
 				<div class="card mb-3">
 					<div class="card-body d-flex justify-content-between">
 						<div class="col-md-6">
 						<a href="{{path('app_user_show',{'slug':ad.author.slug})}}" class="text-decoration-none">
-							<img src="/assets/images/uploads/users/{{ad.author.profilPicture}}" alt="{{ad.author.firstName}}{{ad.author.lastName}}" class="img-fluid rounded object-fit-sm-contain" style="height:50px;">
+							<img src="{{ad.author.profilPicture}}" alt="{{ad.author.firstName}}{{ad.author.lastName}}" class="img-fluid rounded object-fit-sm-contain" style="height:50px;">
 						</a>
 						</div>
 						<div class="col-md-6">
@@ -128,7 +152,64 @@
 					</div>
 				</div>
 			</div>
+</div>
 
+	<div class="col-md-9 mt-2">
+			<div class="card border-0">
+					<div class="card-body">
+						{% if nbComment >0 %}
+						<h4 class="card-title text-center text-capitalize">
+						{{ad.comments|length}} {% if nbComment >1 %}
+							Commentaires
+							{% else %}
+							Commentaire
+						{% endif %}
+						</h4>
+						{% else %}
+						<h4 class="card-title text-center">Pas de commentaires</h4>
+						{% endif %}
+
+						{% for comment in ad.comments %}
+
+						<div class="card mb-3">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-2">
+									<a href="{{path('app_user_show',{'slug':comment.author.slug})}}" class="text-decoration-none">
+										<img src="{{comment.author.profilPicture}}" alt="{{comment.author.firstName}}{{comment.author.lastName}}" class="img-fluid rounded object-fit-sm-contain" style="height:50px;">
+									</a>
+									</div>
+									<div class="col-md-10"> 
+									<a href="{{path('app_user_show',{'slug':comment.author.slug})}}" class="text-decoration-none">
+										<h6 class="fw-bold text-capitalize">Par  {{comment.author.firstName}}</h6>
+									</a>
+										<p class="card-text">{{comment.content|raw}}</p>
+										
+										<div class="container">
+										{% include "_partials/_rating.html.twig" with {'rating': comment.rating} %}
+									<small class="text-muted">
+										Le {{comment.createdAt|date('d/m/Y')}}
+									</small>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+
+
+
+						
+					</div>
 		</div>
-	</div>
-</div>{% endblock %}
+		</div>
+
+</div>
+
+
+
+
+
+{% endblock %}
+

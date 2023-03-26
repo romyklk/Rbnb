@@ -1,113 +1,176 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Booking n°{{ booking.id }} - {{parent()}}{% endblock %}
+{% block title %}Booking n°{{ booking.id }}
+	-
+	{{parent()}}
+{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <style>
-        .imgpic{
-            width: 5rem;
-            height: 5rem;
-            border-radius: 50%;
-            object-fit: contain;
-            border: 2px solid gray;
-        }
-        .coverBooking{
-            height: 100%;
-            object-fit: contain;
-        }
-    </style>
+	{{ parent() }}
+	<style>
+		.imgpic {
+			width: 5rem;
+			height: 5rem;
+			border-radius: 50%;
+			object-fit: contain;
+			border: 2px solid gray;
+		}
+		.coverBooking {
+			height: 100%;
+			object-fit: contain;
+		}
+	</style>
 {% endblock %}
 
 {% block body %}
-    <div class="container">
+	<div class="container">
 
-{% if app.request.query.get('withAlert') %}
+		{% if app.request.query.get('withAlert') %}
 
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-  <strong>
-      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+			<div class="alert alert-success alert-dismissible fade show" role="alert">
+				<strong>
+					<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
 
-  </strong> Félicitation, votre réservation chez 
-  {{booking.ad.author.lastName}} {{booking.ad.author.firstName}}
-   pour l'annonce 
-   {{booking.ad.title}} 
-   a bien été prise en compte. Vous allez recevoir un email de confirmation.
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+				</strong>
+				Félicitation, votre réservation chez
+				{{booking.ad.author.lastName}}
+				{{booking.ad.author.firstName}}
+				pour l'annonce
+				{{booking.ad.title}}
+				a bien été prise en compte. Vous allez recevoir un email de confirmation.
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
 
-{% endif %}
-    
-            <h1 class="text-center">Confirmation de votre réservation n°{{ booking.id }} </h1>
+		{% endif %}
 
-<div class="row">
-        <table class="table table-info table-striped table-hover">
-        <tbody>
-            <tr>
-                <th>Id Réservation</th>
-                <td>{{ booking.id }}</td>
-            </tr>
-            <tr>
-                <th>Date d'arrivée</th>
-                <td>{{ booking.startDate ? booking.startDate|date('d/m/Y') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Date de départ</th>
-                <td>{{ booking.createdAt ? booking.createdAt|date('d/m/Y') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Montant total</th>
-                <td>{{ booking.amount|number_format(2, ',', '.')  }} &euro;</td>
-            </tr>
-            <tr>
-                <th>Date d'achat</th>
-                <td>{{ booking.reservationDate ? booking.reservationDate|date('d/m/Y') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-    <div class="row mt-3">
-    <h4 class="text-center">
-        Information de votre hébergement :
-    </h4>
 
-    <div class="col-md-3">
-    <a href="{{path('app_user_show',{'slug':booking.ad.author.slug})}}">
-    <img src="{{booking.ad.author.profilPicture}}" alt="{{booking.ad.author.firstname}}-{{booking.ad.author.lastName}}" class="img-fluid imgpic"><br>
-</a>
-    {{booking.ad.author.firstname}} {{booking.ad.author.lastName}}<br>
-    {{booking.ad.author.email}}<br>
-    {{booking.ad.author.phone}}<br>
-    {{booking.ad.author.address}}<br>
-    {{booking.ad.author.postalCode}} {{booking.ad.author.city}}<br>
-    {{booking.ad.author.country}}<br>
-    <a href="{{path('app_user_show',{'slug':booking.ad.author.slug})}}" class="text-decoration-none">
-	<span class="badge bg-primary">{{booking.ad.author.ads|length}} annonces</span>
+		<div class="row">
+
+			<div class="col-md-8">
+				<h3 class="text-center mt-2">Confirmation de votre réservation n°{{ booking.id }}
+				</h3>
+				<table class="table table-info table-striped table-hover">
+					<tbody>
+						<tr>
+							<th>Id Réservation</th>
+							<td>{{ booking.id }}</td>
+						</tr>
+						<tr>
+							<th>Date d'arrivée</th>
+							<td>{{ booking.startDate ? booking.startDate|date('d/m/Y') : '' }}</td>
+						</tr>
+						<tr>
+							<th>Date de départ</th>
+							<td>{{ booking.createdAt ? booking.createdAt|date('d/m/Y') : '' }}</td>
+						</tr>
+						<tr>
+							<th>Montant total</th>
+							<td>{{ booking.amount|number_format(2, ',', '.')  }}
+								&euro;</td>
+						</tr>
+						<tr>
+							<th>Date d'achat</th>
+							<td>{{ booking.reservationDate ? booking.reservationDate|date('d/m/Y') : '' }}</td>
+						</tr>
+						<tr>
+							<th>Commentaire</th>
+							<td>{{ booking.comment | default("Aucun commentaire") }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-md-4">
+				<h3 class="text-center mt-2">Laisser un commentaire</h3>
+				<div class="col-md-12 shadow px-5 py-3">
+					{% if date() > booking.createdAt %}
+						<h6>
+							Votre avis compte pour nous, merci de nous le laisser.
+						</h6>
+
+						{% set comment = booking.ad.getCommentFromAuthor(app.user) %}
+
+
+						{% if comment is not null %}
+							<p>
+                                Vous avez déjà laissé un commentaire pour cette réservation.
+                                <br>
+                                Note : {% include "_partials/_rating.html.twig" with {'rating': comment.rating} %}
+
+                                <br>
+                                Commentaire : {{comment.content}}
+                            </p>
+
+						{% else %}
+							{% set range = range(0, 5) %}
+							{{form_start(form)}}
+							{{form_row(form.rating, {'attr': {'min': 0,'max': 5,'step': 1},'choices': range})}}
+							{{form_row(form.content, {'attr': {'rows': 6}})}}
+							<button type="submit" class="btn btn-success rounded mb-2">Envoyer</button>
+							{{form_end(form)}}
+						{% endif %}
+
+
+					{% else %}
+						<p>
+							Vous ne pouvez pas encore laisser de commentaire pour cette réservation car elle n'est pas encore terminée.
+						</p>
+					{% endif %}
+
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row mt-3">
+			<h4 class="text-center">
+				Information de votre hébergement :
+			</h4>
+
+			<div class="col-md-3">
+				<a href="{{path('app_user_show',{'slug':booking.ad.author.slug})}}">
+					<img src="{{booking.ad.author.profilPicture}}" alt="{{booking.ad.author.firstname}}-{{booking.ad.author.lastName}}" class="img-fluid imgpic"><br>
+				</a>
+				{{booking.ad.author.firstname}}
+				{{booking.ad.author.lastName}}<br>
+				{{booking.ad.author.email}}<br>
+				{{booking.ad.author.phone}}<br>
+				{{booking.ad.author.address}}<br>
+				{{booking.ad.author.postalCode}}
+				{{booking.ad.author.city}}<br>
+				{{booking.ad.author.country}}<br>
+				<a href="{{path('app_user_show',{'slug':booking.ad.author.slug})}}" class="text-decoration-none">
+					<span class="badge bg-primary">{{booking.ad.author.ads|length}}
+						annonces</span>
+				</a>
+			</div>
+			<div class="col-md-9">
+				<div class="card mb-3 border-0" style="max-width: 540px;">
+					<div class="row g-0">
+						<div class="col-md-4">
+							<a href="{{path('app_ad_show',{'slug':booking.ad.slug})}}">
+								<img src="{{booking.ad.coverImage}}" class="img-fluid coverBooking" alt="...">
 							</a>
-    </div>
-    <div class="col-md-9">
-        <div class="card mb-3 border-0" style="max-width: 540px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-    <a href="{{path('app_ad_show',{'slug':booking.ad.slug})}}">
-      <img src="{{booking.ad.coverImage}}" class="img-fluid coverBooking" alt="...">
-    </a>
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">Hébergement : {{booking.ad.title}}</h5>
-        <p class="card-text">{{booking.ad.introduction}}</p>
-        <p class="card-text"><small class="text-muted">En ligne depuis le {{booking.ad.createdAt|date('d/m/Y')}}</small></p>
-        <a href="{{path('app_ad_show',{'slug':booking.ad.slug})}}" class="btn btn-info btn-sm">Plus d'Information</a>
-      </div>
-    </div>
-  </div>
-</div>
+						</div>
+						<div class="col-md-8">
+							<div class="card-body">
+								<h5 class="card-title">Hébergement :
+									{{booking.ad.title}}</h5>
+								<p class="card-text">{{booking.ad.introduction}}</p>
+								<p class="card-text">
+									<small class="text-muted">En ligne depuis le
+										{{booking.ad.createdAt|date('d/m/Y')}}</small>
+								</p>
+								<a href="{{path('app_ad_show',{'slug':booking.ad.slug})}}" class="btn btn-info btn-sm">Plus d'Information</a>
+							</div>
+						</div>
+					</div>
+				</div>
 
-    </div>
+			</div>
 
 
-</div>
+		</div>
 
-    </div>
+	</div>
 {% endblock %}

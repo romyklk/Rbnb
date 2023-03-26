@@ -9,6 +9,8 @@ use App\Entity\User;
 use Faker\Generator;
 use App\Entity\Image;
 use App\Entity\Booking;
+use App\Entity\Comment;
+use Cocur\Slugify\Slugify;
 use League\ISO3166\ISO3166;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -116,14 +118,27 @@ class AdFixtures extends Fixture
 
                 $manager->persist($booking);
 
+                // Gestion des commentaires
+
+                if (mt_rand(0, 1)) {
+                    $comment = new Comment();
+                    
+                    // Nombre de commentaires par réservation 
+                    for($k = 0; $k < mt_rand(0, 10); $k++){ 
+                        $comment->setAuthor($faker->randomElement($users))
+                        ->setAd($ad)
+                        ->setRating(mt_rand(1, 5))
+                        ->setContent($faker->paragraph());
+
+                        $manager->persist($comment);
+                    }
+                }
+
 
             }
 
             $manager->persist($ad);
         }
-
-
-
 
         $manager->flush();
     }

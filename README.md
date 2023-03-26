@@ -126,6 +126,15 @@ Ajouter les assertions `use Symfony\Component\Validator\Constraints as Assert;`
 - Création du crud
 `symfony console make:crud Booking`
 
+- Creation de l'entité Comment avec la commande suivante :
+`symfony console make:entity`
+ - Entity Comment
+    - createdAt (datetime) Nullable = false
+    - rating (integer) Nullable = false pour la note
+    - content (text) Nullable = false
+    - author (User) Relation ManyToOne avec User (nullable = false)
+    - ad (Ad) Relation ManyToOne avec Ad (nullable = false)
+
 
 
 
