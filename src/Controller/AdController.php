@@ -7,23 +7,44 @@ use App\Form\AdType;
 use App\Entity\Image;
 use App\Repository\AdRepository;
 use App\Repository\ImageRepository;
+use App\Services\Pagination;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/ads')]
 class AdController extends AbstractController
-{
-    #[Route('/', name: 'app_ads', methods: ['GET'])]
-    public function index(AdRepository $adRepository): Response
+{   // {page<\d+>?1} signifie que la page est un nombre et que sa valeur par défaut est 1
+    #[Route('/{page<\d+>?1}', name: 'app_ads', methods: ['GET'])]
+    public function index(AdRepository $adRepository,$page,Pagination $pagination): Response
     {
+
+    /*   
+        // Afficher 10 annonces par page
+        $limit = 9;
+
+        // Calculer l'offset
+        $offset = $page * $limit - $limit; // 1 * 10 - 10 = 0 Ce qui est le premier élément de la page 1 2 * 10 - 10 = 10 Ce qui est le premier élément de la page 2
+
+        // $page contient le nombre de la page actuelle
+        $pages = ceil(count($adRepository->findAll()) / $limit);
+
+
+     */
+
+        $pagination->setEntityClass(Ad::class)
+                    ->setPage($page)
+                    ->setLimit(9);
+
         return $this->render('ad/index.html.twig', [
-            'ads' => $adRepository->findAll(),
+            'ads' => $pagination->getData(), // On envoie les annonces à la vue
+           /*  'pages' => $pagination->getPages(), // On envoie le nombre de pages à la vue
+            'page' => $page, // On envoie la page actuelle à la vue */
+            'pagination' => $pagination
         ]);
     }
 

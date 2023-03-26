@@ -10,47 +10,59 @@
 	<div class="container">
 		<div class="row mt-2">
 			{% for ad in ads %}
-			{% set adUrl = path('app_ad_show',{slug:ad.slug}) %}
+				{% set adUrl = path('app_ad_show',{slug:ad.slug}) %}
 				<div class="col-md-4 my-2">
 					<div class="card" style="width: 25rem;">
-					<a href="{{adUrl}}" class="text-decoration-none">
-						<img src="{{ad.coverImage}}" class="card-img-top" alt="{{ad.title}}">
-					</a>
-					<a href="{{adUrl}}" class="text-decoration-none">
-						<div class="card-header text-center">
-						{{ad.type}} {{ad.rooms}} chambres<br>
-                            
-                            <div class="row">
-                            <strong class="text-dark" style="font-weight:bold">{{ad.price | number_format(2)}}/Nuit €</strong>
-							{% if ad.comments|length >0 %}
-							
-                                <small class="text-end">
-									{% include "_partials/_rating.html.twig" with {'rating': ad.getAvgRatings()} %}
-
-								</small>
-								{% else %}
-								<small class="text-end">Pas de note</small>
-
-								{% endif %}
-
-                            </div>
-						</div>
-					</a>
-						<div class="card-body">
 						<a href="{{adUrl}}" class="text-decoration-none">
-							<h5 class="card-title">{{ad.title}}</h5>
+							<img src="{{ad.coverImage}}" class="card-img-top" alt="{{ad.title}}">
 						</a>
+						<a href="{{adUrl}}" class="text-decoration-none">
+							<div class="card-header text-center">
+								{{ad.type}}
+								{{ad.rooms}}
+								chambres<br>
+
+								<div class="row">
+									<strong class="text-dark" style="font-weight:bold">{{ad.price | number_format(2)}}/Nuit €</strong>
+									{% if ad.comments|length >0 %}
+
+										<small class="text-end">
+											{% include "_partials/_rating.html.twig" with {'rating': ad.getAvgRatings()} %}
+
+										</small>
+									{% else %}
+										<small class="text-end">Pas de note</small>
+
+									{% endif %}
+
+								</div>
+							</div>
+						</a>
+						<div class="card-body">
+							<a href="{{adUrl}}" class="text-decoration-none">
+								<h5 class="card-title">{{ad.title}}</h5>
+							</a>
 							<p class="card-text">{{ad.introduction}}</p>
 							<a href="{{adUrl}}" class="btn btn-primary rounded-pill">Voir</a>
 							{% if app.user  and app.user == ad.author %}
-							<a href="{{path('app_ad_edit',{'id':ad.id})}}" class="btn btn-warning rounded text-white"><i class="bi bi-pen"></i></a>
-							<a href="{{path('app_ad_delete',{'slug':ad.slug})}}" class="btn btn-danger rounded text-white"><i class="bi bi-trash3"></i></a>
-						{% endif %}
+								<a href="{{path('app_ad_edit',{'id':ad.id})}}" class="btn btn-warning rounded text-white">
+									<i class="bi bi-pen"></i>
+								</a>
+								<a href="{{path('app_ad_delete',{'slug':ad.slug})}}" class="btn btn-danger rounded text-white">
+									<i class="bi bi-trash3"></i>
+								</a>
+							{% endif %}
 						</div>
 					</div>
 				</div>
 			{% endfor %}
 		</div>
+
+
+		{# Pagination #}
+
+		{% include "_partials/_pagination.html.twig" with {'pageRoute': 'app_ads'} %}
 	</div>
+
 
 {% endblock %}

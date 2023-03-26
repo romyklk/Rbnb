@@ -142,5 +142,9 @@ Ajouter les assertions `use Symfony\Component\Validator\Constraints as Assert;`
 `symfony console make:admin:dashboard`
 `symfony console make:admin:crud`
 
+## Pagination
+
+- Installation de KnpPaginatorBundle
+`composer require knplabs/knp-paginator-bundle`
 
 

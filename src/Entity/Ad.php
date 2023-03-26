@@ -507,5 +507,4 @@ public function getNotAvailableDays()
         return $this;
     }
 
-
 }
