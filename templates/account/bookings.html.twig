@@ -36,7 +36,7 @@
 							{% if comment is not null %}
 								<p class="card-text">Votre commentaire :</p>
 								<p>
-									{{comment.content}}
+									{{comment.content|raw}}
 								</p>
 								<p>
 									Note :
@@ -56,6 +56,8 @@
 					Merci pour votre réservation !
 				</div>
 			</div>
+	
+
 		{% endfor %}
 	</div>
 </div>{% endblock %}

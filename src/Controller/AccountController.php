@@ -6,6 +6,7 @@ use App\Form\AccountType;
 use App\Entity\PasswordUpdate;
 use App\Form\PasswordUpdateType;
 use App\Repository\UserRepository;
+use App\Services\Pagination;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -115,13 +116,15 @@ class AccountController extends AbstractController
 
     // Pour afficher les reservations d'un utilisateur
     #[Route('/account/bookings', name: 'app_account_bookings')]
-    public function bookings(UserRepository $userRepository): Response
+    public function bookings(UserRepository $userRepository,): Response
     {
         $user = $this->getUser();
        // $bookings = $userRepository->findBookings($user);
+       
 
         return $this->render('account/bookings.html.twig', [
            // 'bookings' => $bookings,
+            
         ]);
     }
 
