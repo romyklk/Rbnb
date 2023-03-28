@@ -38,7 +38,7 @@ class AdController extends AbstractController
 
         $pagination->setEntityClass(Ad::class)
                     ->setPage($page)
-                    ->setLimit(9);
+                    ->setLimit(36);
 
         return $this->render('ad/index.html.twig', [
             'ads' => $pagination->getData(), // On envoie les annonces à la vue

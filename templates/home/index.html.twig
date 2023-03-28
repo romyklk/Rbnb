@@ -1,9 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home {% endblock %}
+{% block title %}Home
+{% endblock %}
 
 {% block body %}
-    <h1>
-        Hello !
-    </h1>
-{% endblock %}
+
+
+	<div class="container mt-5">
+		<h1>Bienvenue sur notre site de location de maison</h1>
+		<p>Nous offrons des maisons de qualité à des prix compétitifs.</p>
+		<a href="#" class="btn btn-primary">Maisons disponibles</a>
+	</div>
+
+	<div class="container mt-5">
+		<h2>Nos maisons</h2>
+		<div class="row">
+			<div class="col-md-4 mt-3">
+				<div class="card">
+					<img class="card-img-top" src="https://picsum.photos/200" alt="Card image cap">
+					<div class="card-body">
+						<h4 class="card-title">Maison 1</h4>
+						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sagittis velit. Sed sit amet magna vitae orci vehicula consequat. Nulla volutpat, mauris ac venenatis semper, enim nisi dapibus dolor, vel laoreet odio mauris eu eros.
+						</p>
+						<a href="#" class="btn btn-primary">Voir plus</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 mt-3">
+				<div class="card">
+					<img class="card-img-top" src="https://picsum.photos/200" alt="Card image cap">
+					<div class="card-body">
+						<h4 class="card-title">Maison 2</h4>
+						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sagittis velit. Sed sit amet magna vitae orci vehicula consequat. Nulla volutpat, mauris ac venenatis semper, enim nisi dapibus dolor, vel laoreet odio mauris eu eros.
+						</p>
+						<a href="#" class="btn btn-primary">Voir plus</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 mt-3">
+				<div class="card">
+					<img class="card-img-top" src="https://picsum.photos/200" alt="Card image cap">
+					<div class="card-body">
+						<h4 class="card-title">Maison 2</h4>
+						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sagittis velit. Sed sit amet magna vitae orci vehicula consequat. Nulla volutpat, mauris ac venenatis semper, enim nisi dapibus dolor, vel laoreet odio mauris eu eros.
+						</p>
+						<a href="#" class="btn btn-primary">Voir plus</a>
+					</div>
+				</div>
+			</div>
+        </div>
+
+
+		{% endblock %}

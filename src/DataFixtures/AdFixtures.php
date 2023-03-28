@@ -43,11 +43,22 @@ class AdFixtures extends Fixture
         $manager->persist($admin);
 
         $users =[];
+        $gender = ['female','male'];
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 200; $i++) {
             $user = new User();
-            $user->setFirstName($faker->firstName())
-                ->setLastName($faker->lastName())
+            $genre = $faker->randomElement($gender);
+            $picture = 'https://randomuser.me/api/portraits/';
+            $pictureId = $faker->numberBetween(1, 99) . '.jpg';
+
+            if($genre == 'male') {
+                $picture = $picture . 'men/' . $pictureId;
+            } else {
+                $picture = $picture . 'women/' . $pictureId;
+            }
+            
+            $user->setFirstName($faker->firstName($genre))
+                ->setLastName($faker->lastName($genre))
                 ->setEmail($faker->email())
                 ->setAddress($faker->address())
                 ->setCity($faker->city())
@@ -58,7 +69,7 @@ class AdFixtures extends Fixture
                 ->setPassword(password_hash('password', PASSWORD_DEFAULT))
                 ->setIntroduction($faker->sentence())
                 ->setPresentation('<p>' . join('</p><p>', $faker->paragraphs(3)) . '</p>')
-                ->setProfilPicture($faker->imageUrl());
+                ->setProfilPicture($picture);
 
             $manager->persist($user);
             $users[] = $user;
@@ -68,12 +79,12 @@ class AdFixtures extends Fixture
         // $lugify = new Slugify();
         $type = ['Loft', 'Maison', 'Appartement', 'Chambre', 'Studio', 'Maison de maître'];
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 500; $i++) {
 
             $ad = new Ad();
             $ad->setTitle($faker->sentence())
                 // ->setSlug($lugify->slugify($ad->getTitle()))
-                ->setCoverImage($faker->imageUrl())
+                ->setCoverImage('https://picsum.photos/'. mt_rand(100, 1000))
                 ->setAdress($faker->address())
                 ->setAuthor($faker->randomElement($users))
                 ->setCity($faker->city())
@@ -89,7 +100,7 @@ class AdFixtures extends Fixture
 
             for ($j = 0; $j < (mt_rand(2, 5)); $j++) {
                 $image = new Image();
-                $image->setUrl($faker->imageUrl())
+                $image->setUrl('https://picsum.photos/'. mt_rand(100, 1000))
                     ->setCaption($faker->sentence())
                     ->setAd($ad);
                 $manager->persist($image);
@@ -113,7 +124,7 @@ class AdFixtures extends Fixture
                     ->setCreatedAt($createdAt)
                     ->setAmount($amount)
                     ->setReservationDate($faker->dateTimeBetween('-9 months'))
-                    ->setComment($comment)
+                    ->setComment('Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.')
                     ;
 
                 $manager->persist($booking);
@@ -124,7 +135,7 @@ class AdFixtures extends Fixture
                     $comment = new Comment();
                     
                     // Nombre de commentaires par réservation 
-                    for($k = 0; $k < mt_rand(0, 10); $k++){ 
+                    for($k = 0; $k < mt_rand(0, 50); $k++){ 
                         $comment->setAuthor($faker->randomElement($users))
                         ->setAd($ad)
                         ->setRating(mt_rand(1, 5))
