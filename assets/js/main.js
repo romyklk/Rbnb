@@ -1,3 +1,8 @@
+var $ = require('jquery');
+global.$ = global.jQuery = $;
+require('bootstrap');
+require('./main.js');
+
 
 // Hide alert après 5 secondes avec du fadeout
 
