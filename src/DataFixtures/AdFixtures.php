@@ -45,7 +45,7 @@ class AdFixtures extends Fixture
         $users =[];
         $gender = ['female','male'];
 
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i <50; $i++) {
             $user = new User();
             $genre = $faker->randomElement($gender);
             $picture = 'https://randomuser.me/api/portraits/';
@@ -79,7 +79,7 @@ class AdFixtures extends Fixture
         // $lugify = new Slugify();
         $type = ['Loft', 'Maison', 'Appartement', 'Chambre', 'Studio', 'Maison de maître'];
 
-        for ($i = 0; $i < 500; $i++) {
+        for ($i = 0; $i < 100; $i++) {
 
             $ad = new Ad();
             $ad->setTitle($faker->sentence())
