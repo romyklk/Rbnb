@@ -124,7 +124,7 @@ class AdFixtures extends Fixture
                     ->setCreatedAt($createdAt)
                     ->setAmount($amount)
                     ->setReservationDate($faker->dateTimeBetween('-9 months'))
-                    ->setComment('Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.')
+                    ->setComment($faker->paragraph(1))
                     ;
 
                 $manager->persist($booking);
