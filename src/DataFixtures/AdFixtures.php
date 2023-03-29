@@ -45,7 +45,7 @@ class AdFixtures extends Fixture
         $users =[];
         $gender = ['female','male'];
 
-        for ($i = 0; $i <150; $i++) {
+        for ($i = 0; $i <30; $i++) {
             $user = new User();
             $genre = $faker->randomElement($gender);
             $picture = 'https://randomuser.me/api/portraits/';
@@ -79,7 +79,7 @@ class AdFixtures extends Fixture
         // $lugify = new Slugify();
         $type = ['Loft', 'Maison', 'Appartement', 'Chambre', 'Studio', 'Maison de maître'];
 
-        for ($i = 0; $i < 300; $i++) {
+        for ($i = 0; $i < 50; $i++) {
 
             $ad = new Ad();
             $ad->setTitle($faker->sentence())
@@ -98,7 +98,7 @@ class AdFixtures extends Fixture
             //->setCreatedAt(new \DateTimeImmutable());
 
 
-            for ($j = 0; $j < (mt_rand(2, 5)); $j++) {
+            for ($j = 0; $j < (mt_rand(2, 3)); $j++) {
                 $image = new Image();
                 $image->setUrl('https://picsum.photos/'. mt_rand(100, 1000))
                     ->setCaption($faker->sentence())
@@ -108,7 +108,7 @@ class AdFixtures extends Fixture
 
             // Gestion des réservations
 
-            for ($j = 0; $j < mt_rand(0, 20); $j++) {
+            for ($j = 0; $j < mt_rand(0, 10); $j++) {
                 $booking = new Booking();
                 $createdAt = new \DateTime();
                 $startDate = $faker->dateTimeBetween('-1 months');
@@ -135,7 +135,7 @@ class AdFixtures extends Fixture
                     $comment = new Comment();
                     
                     // Nombre de commentaires par réservation 
-                    for($k = 0; $k < mt_rand(0, 20); $k++){ 
+                    for($k = 0; $k < mt_rand(0, 10); $k++){ 
                         $comment->setAuthor($faker->randomElement($users))
                         ->setAd($ad)
                         ->setRating(mt_rand(1, 5))
