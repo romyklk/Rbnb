@@ -7,6 +7,7 @@
         "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-intl": "*",
         "cocur/slugify": "^4.3",
         "doctrine/annotations": "^2.0",
         "doctrine/doctrine-bundle": "^2.8",
@@ -111,7 +112,6 @@
         "symfony/phpunit-bridge": "^6.2",
         "symfony/stopwatch": "6.2.*",
         "symfony/web-profiler-bundle": "6.2.*",
-        "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "ext-intl" : "*"
+        "doctrine/doctrine-fixtures-bundle": "^3.4"
     }
 }
