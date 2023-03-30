@@ -89,7 +89,6 @@
             "@auto-scripts"
         ],
         "compile": [
-            "encore production",
             "php bin/console cache:clear --no-warmup",
             "php bin/console cache:warmup"
         ]
