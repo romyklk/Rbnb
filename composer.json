@@ -91,9 +91,6 @@
        "compile": [
             "php bin/console cache:clear --env=prod",
             "composer dump-autoload --optimize",
-            "php bin/console composer install",
-            "php bin/console cache:clear --env=prod",
-            "composer dump-autoload --optimize",
             "php bin/console cache:clear --env=prod",
             "php bin/console cache:warmup --env=prod"
         
