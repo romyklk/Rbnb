@@ -87,6 +87,14 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "compile": [
+            "symfony-cmd",
+            "assets:install --symlink --relative public",
+            "encore production",
+            "php bin/console cache:clear --no-warmup",
+            "php bin/console cache:warmup"
+            
         ]
     },
     "conflict": {
