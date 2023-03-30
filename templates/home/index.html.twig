@@ -3,52 +3,94 @@
 {% block title %}Home
 {% endblock %}
 
+{% block stylesheets %}
+	<style>
+		.text-shadow {
+			text-shadow: 2px 2px 6px #000000;
+			color: white !important;
+
+		}
+	</style>
+{% endblock %}
+
 {% block body %}
+
+	<div class="container-fluid">
+
+		<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-inner">
+
+				{% for ad in bestAds %}
+					<div class="carousel-item {% if loop.first %}active{% endif %}">
+						<div class="card bg-dark text-white">
+							<img src="{{ad.coverImage}}" class="card-img" alt="..." style="height:20rem">
+							<div class="card-img-overlay">
+								<h5 class="card-title text-shadow text-center">{{ad.title}}</h5>
+								<p class="card-text text-shadow text-center">{{ad.introduction}}.</p>
+								<div class="row">
+									<div class="col-md-6"></div>
+									<div class="col-md-6">
+										<a href="{{path('app_ad_show', {'slug': ad.slugAd})}}" class="btn btn-primary">Voir l'annonce</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+
+
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+
+	</div>
 
 
 	<div class="container mt-5">
-		<h1>Bienvenue sur notre site de location de maison</h1>
-		<p>Nous offrons des maisons de qualité à des prix compétitifs.</p>
-		<a href="#" class="btn btn-primary">Maisons disponibles</a>
+		<h1 class="text-center">Bienvenue sur Rbnb</h1>
+		<p class="text-center h5">
+		Site de  Locations saisonnières et locations en résidence. Nous offrons des maisons de qualité à des prix compétitifs.</p>
+		<div class="d-grid gap-2 col-2 mx-auto">
+			<a href="{{path('app_ads')}}" class="btn btn-outline-info rounded-pill">Voir les offres
+			</a>
+		</div>
 	</div>
 
 	<div class="container mt-5">
-		<h2>Nos maisons</h2>
+		<h2>Les dernières annonces</h2>
 		<div class="row">
-			<div class="col-md-4 mt-3">
-				<div class="card">
-					<img class="card-img-top" src="https://picsum.photos/200" alt="Card image cap">
-					<div class="card-body">
-						<h4 class="card-title">Maison 1</h4>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sagittis velit. Sed sit amet magna vitae orci vehicula consequat. Nulla volutpat, mauris ac venenatis semper, enim nisi dapibus dolor, vel laoreet odio mauris eu eros.
-						</p>
-						<a href="#" class="btn btn-primary">Voir plus</a>
+
+			{% for ad in lastAds %}
+				<div class="col-md-4 mt-3">
+					<div class="card">
+						<img class="card-img-top" src="{{ad.coverImage}}" alt="Card image cap">
+						<div class="card-body">
+						<h6 class="card-subtitle mb-2 text-muted">{{ad.zipCode}} {{ad.city}} {{ad.Country}}</h6>
+							<h4 class="card-title">{{ad.title}}</h4>
+							<p class="card-text">{{ad.introduction}}
+							</p>
+							<div class="text-muted mb-2">
+								<a href="{{path('app_user_show',{'slug':ad.slugUser})}}" class="text-decoration-none text-dark fw-bold">
+									<img src="{{ad.profilPicture}}" alt="profil" style="width:40px;height:40px" class="img-fluid rounded-circle">
+									{{ ad.firstName }}
+									{{ ad.lastName }}
+								</a>
+							</div>
+							<a href="{{path('app_ad_show', {'slug': ad.slugAd})}}" class="btn btn-primary">Voir plus</a>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-4 mt-3">
-				<div class="card">
-					<img class="card-img-top" src="https://picsum.photos/200" alt="Card image cap">
-					<div class="card-body">
-						<h4 class="card-title">Maison 2</h4>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sagittis velit. Sed sit amet magna vitae orci vehicula consequat. Nulla volutpat, mauris ac venenatis semper, enim nisi dapibus dolor, vel laoreet odio mauris eu eros.
-						</p>
-						<a href="#" class="btn btn-primary">Voir plus</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4 mt-3">
-				<div class="card">
-					<img class="card-img-top" src="https://picsum.photos/200" alt="Card image cap">
-					<div class="card-body">
-						<h4 class="card-title">Maison 2</h4>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sagittis velit. Sed sit amet magna vitae orci vehicula consequat. Nulla volutpat, mauris ac venenatis semper, enim nisi dapibus dolor, vel laoreet odio mauris eu eros.
-						</p>
-						<a href="#" class="btn btn-primary">Voir plus</a>
-					</div>
-				</div>
-			</div>
-        </div>
+			{% endfor %}
 
 
-		{% endblock %}
+		</div>
+
+
+	{% endblock %}
