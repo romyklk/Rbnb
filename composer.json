@@ -87,8 +87,17 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+       "compile": [
+            "php bin/console cache:clear --env=prod",
+            "composer dump-autoload --optimize",
+            "php bin/console composer install --no-interaction",
+            "php bin/console cache:clear --env=prod",
+            "composer dump-autoload --optimize",
+            "php bin/console cache:clear --env=prod",
+            "php bin/console cache:warmup --env=prod"
+        
         ]
-       
     },
     "conflict": {
         "symfony/symfony": "*"
