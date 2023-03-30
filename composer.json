@@ -89,7 +89,6 @@
         ],
         "compile": [
             "php bin/console cache:clear --env=prod",
-            "npm run build"
         ]
     },
     "conflict": {
