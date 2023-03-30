@@ -15,7 +15,6 @@
         "doctrine/orm": "^2.14",
         "easycorp/easyadmin-bundle": "^4.6",
         "fakerphp/faker": "^1.21",
-        "league/iso3166": "^4.2",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.16",
         "sensio/framework-extra-bundle": "^6.1",
@@ -89,11 +88,7 @@
             "@auto-scripts"
         ],
        "compile": [
-            "php bin/console cache:clear --env=prod",
-            "composer dump-autoload --optimize",
-            "php bin/console cache:clear --env=prod",
-            "php bin/console cache:warmup --env=prod"
-        
+            "php bin/console cache:clear --env=prod"
         ]
     },
     "conflict": {
@@ -115,7 +110,5 @@
         "symfony/stopwatch": "6.2.*",
         "symfony/web-profiler-bundle": "6.2.*",
         "doctrine/doctrine-fixtures-bundle": "^3.4"
-
-        
     }
 }
