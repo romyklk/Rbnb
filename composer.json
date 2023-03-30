@@ -87,11 +87,8 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ],
-        "compile": [
-            "php bin/console cache:clear --no-warmup",
-            "php bin/console cache:warmup"
         ]
+       
     },
     "conflict": {
         "symfony/symfony": "*"
