@@ -6,6 +6,7 @@ use App\Entity\Ad;
 use App\Entity\User;
 use App\Entity\Booking;
 use App\Entity\Comment;
+use App\Entity\Contact;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -116,5 +117,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Réservations', 'fa-solid fa-calendar-days', Booking::class);
         yield MenuItem::linkToCrud('Membres', 'fa-solid fa-user', User::class);
         yield MenuItem::linkToCrud('Avis', 'fa-brands fa-rocketchat', Comment::class);
+        yield MenuItem::linkToCrud('Message', 'fa-solid fa-envelope', Contact::class);
     }
 }

@@ -10,6 +10,7 @@ use Faker\Generator;
 use App\Entity\Image;
 use App\Entity\Booking;
 use App\Entity\Comment;
+use App\Entity\Contact;
 use Cocur\Slugify\Slugify;
 use League\ISO3166\ISO3166;
 use Doctrine\Persistence\ObjectManager;
@@ -42,21 +43,21 @@ class AdFixtures extends Fixture
 
         $manager->persist($admin);
 
-        $users =[];
-        $gender = ['female','male'];
+        $users = [];
+        $gender = ['female', 'male'];
 
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             $user = new User();
             $genre = $faker->randomElement($gender);
             $picture = 'https://randomuser.me/api/portraits/';
             $pictureId = $faker->numberBetween(1, 99) . '.jpg';
 
-            if($genre == 'male') {
+            if ($genre == 'male') {
                 $picture = $picture . 'men/' . $pictureId;
             } else {
                 $picture = $picture . 'women/' . $pictureId;
             }
-            
+
             $user->setFirstName($faker->firstName($genre))
                 ->setLastName($faker->lastName($genre))
                 ->setEmail($faker->email())
@@ -75,16 +76,16 @@ class AdFixtures extends Fixture
             $users[] = $user;
         }
 
-        
+
         // $lugify = new Slugify();
         $type = ['Loft', 'Maison', 'Appartement', 'Chambre', 'Studio', 'Maison de maître'];
 
-        for ($i = 0; $i < 500; $i++) {
+        for ($i = 0; $i < 50; $i++) {
 
             $ad = new Ad();
             $ad->setTitle($faker->sentence())
                 // ->setSlug($lugify->slugify($ad->getTitle()))
-                ->setCoverImage('https://picsum.photos/'. mt_rand(100, 1000))
+                ->setCoverImage('https://picsum.photos/' . mt_rand(100, 1000))
                 ->setAdress($faker->address())
                 ->setAuthor($faker->randomElement($users))
                 ->setCity($faker->city())
@@ -98,9 +99,9 @@ class AdFixtures extends Fixture
             //->setCreatedAt(new \DateTimeImmutable());
 
 
-            for ($j = 0; $j < (mt_rand(2, 5)); $j++) {
+            for ($j = 0; $j < (mt_rand(2, 3)); $j++) {
                 $image = new Image();
-                $image->setUrl('https://picsum.photos/'. mt_rand(100, 1000))
+                $image->setUrl('https://picsum.photos/' . mt_rand(100, 1000))
                     ->setCaption($faker->sentence())
                     ->setAd($ad);
                 $manager->persist($image);
@@ -124,8 +125,7 @@ class AdFixtures extends Fixture
                     ->setCreatedAt($createdAt)
                     ->setAmount($amount)
                     ->setReservationDate($faker->dateTimeBetween('-9 months'))
-                    ->setComment('Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.')
-                    ;
+                    ->setComment($faker->paragraph(1));
 
                 $manager->persist($booking);
 
@@ -133,22 +133,39 @@ class AdFixtures extends Fixture
 
                 if (mt_rand(0, 1)) {
                     $comment = new Comment();
-                    
+
                     // Nombre de commentaires par réservation 
-                    for($k = 0; $k < mt_rand(0, 50); $k++){ 
+                    for ($k = 0; $k < mt_rand(0, 10); $k++) {
                         $comment->setAuthor($faker->randomElement($users))
-                        ->setAd($ad)
-                        ->setRating(mt_rand(1, 5))
-                        ->setContent($faker->paragraph());
+                            ->setAd($ad)
+                            ->setRating(mt_rand(1, 5))
+                            ->setContent($faker->paragraph());
 
                         $manager->persist($comment);
                     }
                 }
-
-
             }
 
             $manager->persist($ad);
+
+            // Gestion envoi message de contact
+
+            for ($j = 0; $j < mt_rand(0, 10); $j++) {
+                $contact = new Contact();
+                $contact->setFirstName($faker->firstName())
+                    ->setLastName($faker->lastName())
+                    ->setEmail($faker->email())
+                    ->setSubject($faker->sentence())
+                    ->setMessage($faker->paragraph())
+                    ->setCreatedAt(new \DateTimeImmutable())
+                    ->setIsRead(mt_rand(0, 1));
+
+
+                $manager->persist($contact);
+            }
+
+
+
         }
 
         $manager->flush();
