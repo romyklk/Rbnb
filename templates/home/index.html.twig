@@ -4,60 +4,197 @@
 {% endblock %}
 
 {% block stylesheets %}
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"/>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css"/>
+
 {% endblock %}
 
 {% block body %}
 
+	<div class="container-fluid">
+
+		<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-inner">
+
+				{% for ad in bestAds %}
+					<div class="carousel-item {% if loop.first %}active{% endif %}">
+						<div class="card bg-dark text-white">
+							<img src="{{ad.coverImage}}" class="card-img" alt="..." style="height:20rem">
+							<div class="card-img-overlay">
+								<h5 class="card-title text-shadow text-center">{{ad.title}}</h5>
+								<p class="card-text text-shadow text-center">{{ad.introduction}}.</p>
+								<div class="row">
+									<div class="col-md-6"></div>
+									<div class="col-md-6">
+										<a href="{{path('app_ad_show', {'slug': ad.slugAd})}}" class="btn btn-primary">Voir l'annonce</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+
+
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+
+	</div>
+
 
 	<div class="container mt-5">
-		<h1>Bienvenue sur notre site de location de maison</h1>
-		<p>Nous offrons des maisons de qualité à des prix compétitifs.</p>
-		<a href="#" class="btn btn-primary">Maisons disponibles</a>
+		<h1 class="text-center">Bienvenue sur Rbnb</h1>
+		<p class="text-center h5">
+			Site de  Locations saisonnières et locations en résidence. Nous offrons des maisons de qualité à des prix compétitifs.</p>
+		<div class="d-grid gap-2 col-2 mx-auto">
+			<a href="{{path('app_ads')}}" class="btn btn-outline-info rounded-pill">Voir les offres
+			</a>
+		</div>
 	</div>
 
 	<div class="container mt-5">
-		<h2>Nos maisons</h2>
+		<h2>Les dernières annonces</h2>
 		<div class="row">
-			<div class="col-md-4 mt-3">
-				<div class="card">
-					<img class="card-img-top" src="https://picsum.photos/200" alt="Card image cap">
-					<div class="card-body">
-						<h4 class="card-title">Maison 1</h4>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sagittis velit. Sed sit amet magna vitae orci vehicula consequat. Nulla volutpat, mauris ac venenatis semper, enim nisi dapibus dolor, vel laoreet odio mauris eu eros.
-						</p>
-						<a href="#" class="btn btn-primary">Voir plus</a>
+
+			{% for ad in lastAds %}
+				<div class="col-md-4 mt-3">
+					<div class="card">
+						<img class="card-img-top" src="{{ad.coverImage}}" alt="Card image cap">
+						<div class="card-body">
+							<h6 class="card-subtitle mb-2 text-muted">{{ad.zipCode}}
+								{{ad.city}}
+								{{ad.Country}}</h6>
+							<h4 class="card-title">{{ad.title}}</h4>
+							<p class="card-text">{{ad.introduction}}
+							</p>
+							<div class="text-muted mb-2">
+								<a href="{{path('app_user_show',{'slug':ad.slugUser})}}" class="text-decoration-none text-dark fw-bold">
+									<img src="{{ad.profilPicture}}" alt="profil" style="width:40px;height:40px" class="img-fluid rounded-circle">
+									{{ ad.firstName }}
+									{{ ad.lastName }}
+								</a>
+							</div>
+							<a href="{{path('app_ad_show', {'slug': ad.slugAd})}}" class="btn btn-primary">Voir plus</a>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-4 mt-3">
-				<div class="card">
-					<img class="card-img-top" src="https://picsum.photos/200" alt="Card image cap">
-					<div class="card-body">
-						<h4 class="card-title">Maison 2</h4>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sagittis velit. Sed sit amet magna vitae orci vehicula consequat. Nulla volutpat, mauris ac venenatis semper, enim nisi dapibus dolor, vel laoreet odio mauris eu eros.
-						</p>
-						<a href="#" class="btn btn-primary">Voir plus</a>
+
+			{% endfor %}
+
+		</div>
+	</div>
+
+	<div class="container mt-5">
+		<h2>
+			Nos annonces populaires
+		</h2>
+		<div class="row">
+
+			{% for ad in lastBookings %}
+				<div class="col-md-4 mt-3">
+					<div class="card">
+						<img class="card-img-top" src="{{ad.coverImage}}" alt="Card image cap">
+						<div class="card-body">
+							<h6 class="card-subtitle mb-2 text-muted">{{ad.zipCode}}
+								{{ad.city}}
+								{{ad.Country}}</h6>
+							<h4 class="card-title">{{ad.title}}</h4>
+							<p class="card-text">{{ad.introduction}}
+							</p>
+							<div class="text-muted mb-2">
+								<a href="{{path('app_user_show',{'slug':ad.slugUser})}}" class="text-decoration-none text-dark fw-bold">
+									<img src="{{ad.profilPicture}}" alt="profil" style="width:40px;height:40px" class="img-fluid rounded-circle">
+									{{ ad.firstName }}
+									{{ ad.lastName }}
+								</a>
+							</div>
+							<a href="{{path('app_ad_show', {'slug': ad.slugAd})}}" class="btn btn-primary">Voir plus</a>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-4 mt-3">
-				<div class="card">
-					<img class="card-img-top" src="https://picsum.photos/200" alt="Card image cap">
-					<div class="card-body">
-						<h4 class="card-title">Maison 2</h4>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sagittis velit. Sed sit amet magna vitae orci vehicula consequat. Nulla volutpat, mauris ac venenatis semper, enim nisi dapibus dolor, vel laoreet odio mauris eu eros.
-						</p>
-						<a href="#" class="btn btn-primary">Voir plus</a>
+
+			{% endfor %}
+
+		</div>
+	</div>
+
+	<div class="container mt-5">
+
+		<div class="card border-0 shadow px-5">
+			<div class="card-body">
+				<h5 class="card-title h4 text-center">Avis clients</h5>
+				<div class="row avis">
+					<div class="col-md-6 avis">
+
+						{% for comment in lastComments %}
+
+							<div class="d-flex align-items-center">
+								<a href="{{path('app_user_show',{'slug':comment.author.slug})}}" class="text-decoration-none text-primary">
+									<img src="{{comment.author.profilPicture}}" class="mr-3 rounded-circle" alt="...">
+								</a>
+								<div class="m-4">
+								<a href="{{path('app_user_show',{'slug':comment.author.slug})}}" class="text-decoration-none text-primary">
+										<h6 class="mt-0 fw-bold text-primary">{{comment.author.firstName}}
+											{{comment.author.lastName}}</h6>
+									</a>
+									<p>{{comment.content|raw}}</p>
+								</div>
+								<div class="d-flex">
+								
+								<div class="col mx-2">
+								<a href="{{path('app_ad_show',{'slug':comment.ad.slug})}}" class="text-decoration-none text-primary">
+								<img src="{{comment.ad.coverImage}}" class="rounded" alt="..." style="width:5rem">
+								
+								</div>
+								<div class="col">
+									<h6>{{comment.ad.title}} à <span class="text-muted text-capitalize">{{comment.ad.city}} {{comment.ad.Country}}</span></h6>
+								</div>
+								</a>
+								</div>
+							</div>
+
+						{% endfor %}
 					</div>
+
 				</div>
 			</div>
-        </div>
+		</div>
 
 
-		{% endblock %}
+	</div>
+
+
+{% endblock %}
 
 {% block javascripts %}
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+
+	<script>
+		$(document).ready(function () {
+$('.avis').slick({
+infinite: true,
+slidesToShow: 1,
+slidesToScroll: 1,
+autoplay: true,
+autoplaySpeed: 5000,
+arrows: false,
+dots: true
+});
+});
+	</script>
+
 {% endblock %}

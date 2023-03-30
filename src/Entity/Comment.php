@@ -32,6 +32,7 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private ?Ad $ad = null;
 
+
     #[ORM\PrePersist] // Pour que cette méthode soit appelée avant la persistance
     #[ORM\PreUpdate] // Pour que cette méthode soit appelée avant la mise à jour
     public function initializeCreated(): void

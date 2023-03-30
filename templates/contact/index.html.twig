@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact - {{parent()}}{% endblock %}
+
+{% block body %}
+        <div class="container">
+            <div class="row shadow p-5">
+            <h1 class="text-center">Besoin de nous joindre ?</h1>
+                <div class="col-md-8 m-auto">
+                    {{form(form)}}
+                </div>
+            </div>
+        </div>
+{% endblock %}

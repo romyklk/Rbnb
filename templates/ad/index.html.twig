@@ -42,6 +42,7 @@
 							<a href="{{adUrl}}" class="text-decoration-none">
 								<h5 class="card-title">{{ad.title}}</h5>
 							</a>
+							<h6 class="card-subtitle mb-2 text-muted">{{ad.zipCode}} {{ad.city}} {{ad.Country}}</h6>
 							<p class="card-text">{{ad.introduction}}</p>
 							<a href="{{adUrl}}" class="btn btn-primary rounded-pill">Voir</a>
 							{% if app.user  and app.user == ad.author %}
