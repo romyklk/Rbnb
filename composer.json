@@ -87,8 +87,9 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-       "compile": [
-            "php bin/console cache:clear --env=prod"
+        "compile": [
+            "php bin/console cache:clear --env=prod",
+            "npm run build"
         ]
     },
     "conflict": {
